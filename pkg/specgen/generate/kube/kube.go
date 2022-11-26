@@ -207,7 +207,7 @@ func ToSpecGen(ctx context.Context, opts *CtrSpecGenOptions) (*specgen.SpecGener
 	s.InitContainerType = opts.InitContainerType
 
 	setupSecurityContext(s, opts.Container.SecurityContext, opts.PodSecurityContext)
-	err := setupLivenessProbe(s, opts.Container, opts.RestartPolicy)
+	err = setupLivenessProbe(s, opts.Container, opts.RestartPolicy)
 	if err != nil {
 		return nil, fmt.Errorf("failed to configure livenessProbe: %w", err)
 	}
