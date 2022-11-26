@@ -16,6 +16,7 @@ import (
 
 	"github.com/containers/common/libimage"
 	"github.com/containers/common/libnetwork/types"
+	"github.com/containers/common/pkg/config"
 	"github.com/containers/common/pkg/parse"
 	"github.com/containers/common/pkg/secrets"
 	cutil "github.com/containers/common/pkg/util"
@@ -144,6 +145,16 @@ type CtrSpecGenOptions struct {
 
 func ToSpecGen(ctx context.Context, opts *CtrSpecGenOptions) (*specgen.SpecGenerator, error) {
 	s := specgen.NewSpecGenerator(opts.Container.Image, false)
+
+	rtc, err := config.Default()
+	if err != nil {
+		return nil, err
+	}
+
+	if s.CgroupsMode == "" {
+		s.CgroupsMode = rtc.Cgroups()
+	}
+
 
 	// pod name should be non-empty for Deployment objects to be able to create
 	// multiple pods having containers with unique names
